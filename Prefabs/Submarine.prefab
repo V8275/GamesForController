@@ -139,11 +139,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6c52d24dc3eef4469937b027838eb7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 1
-  jumpForce: 3
+  HP: 0
+  jumpForce: 5
   effectsController: {fileID: 858540008572529503}
   rotationResetThreshold: -0.1
-  rb: {fileID: 0}
+  rb: {fileID: 7498362499780503444}
 --- !u!114 &858540008572529503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,9 +156,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 154da04c4da01fb498eee48457f37ebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementMaterials: []
+  MovementMaterials:
+  - {fileID: 2100000, guid: 7400cb29aac1cd241932608eca50388e, type: 2}
+  - {fileID: 2100000, guid: df9bb08a14229d8428b8c8312b5711f1, type: 2}
   MoveVectorName: _Movement
-  MoveVector: {x: 0.04, y: 0, z: 0, w: 0}
+  MoveVector: {x: 0.05, y: 0, z: 0, w: 0}
 --- !u!33 &8525177852436245249
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -236,7 +238,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_Constraints: 122
   m_CollisionDetection: 0
 --- !u!64 &1825225591036614466
@@ -260,7 +262,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: -7097241963100291799, guid: 5df4938717f369042b520159bd552e9d, type: 3}
+  m_Mesh: {fileID: -8934295086871252109, guid: 5df4938717f369042b520159bd552e9d, type: 3}
 --- !u!1 &5208912947146571553
 GameObject:
   m_ObjectHideFlags: 0

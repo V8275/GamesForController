@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class WebSocketManager : MonoBehaviour
 {
-    public event Action<MyDataModel> OnDataReceived;
+    public event Action<SensorData> OnDataReceived;
 
     [SerializeField]
     private string WebSocketUrl = "ws://localhost:8080";
@@ -21,7 +21,6 @@ public class WebSocketManager : MonoBehaviour
     private Text outputText;
 
     private ClientWebSocket _webSocket;
-    private PlayerController _playerController;
     private bool connected = false;
 
     // Singleton instance
@@ -43,7 +42,6 @@ public class WebSocketManager : MonoBehaviour
 
     private void Start()
     {
-        // Назначаем обработчик нажатия кнопки
         if (connectButton != null)
         {
             connectButton.onClick.AddListener(OnConnectButtonClicked);
@@ -56,8 +54,7 @@ public class WebSocketManager : MonoBehaviour
         connectButton = conBut;
         inputField = conField;
         exceptionPanel = excePanel;
-        if(debugTxt)
-            outputText = debugTxt;
+        outputText = debugTxt;
 
         if (connectButton != null)
         {
@@ -65,14 +62,12 @@ public class WebSocketManager : MonoBehaviour
         }
     }
 
-    // Обработчик нажатия кнопки
     public async void OnConnectButtonClicked()
     {
         WebSocketUrl = inputField.text;
         await ConnectToServer();
     }
 
-    // Публичный метод для подключения к серверу
     public async Task ConnectToServer()
     {
         if (_webSocket == null || _webSocket.State != WebSocketState.Open)
@@ -84,9 +79,8 @@ public class WebSocketManager : MonoBehaviour
                 Debug.Log("Connected to WebSocket server");
                 connected = true;
 
-                _ = ReceiveMessagesAsync(); // Запускаем прием сообщений
+                _ = ReceiveMessagesAsync();
 
-                // Можно обновить UI, например, изменить текст кнопки
                 if (connectButton != null)
                 {
                     connectButton.GetComponentInChildren<Text>().text = "Connected";
@@ -97,7 +91,6 @@ public class WebSocketManager : MonoBehaviour
                 Debug.LogError($"Connection failed: {ex.Message}");
                 connected = false;
                 exceptionPanel.SetActive(true);
-                // Обновляем UI при ошибке
                 if (connectButton != null)
                 {
                     connectButton.GetComponentInChildren<Text>().text = "Retry Connect";
@@ -123,9 +116,9 @@ public class WebSocketManager : MonoBehaviour
 
                     try
                     {
-                        var data = JsonUtility.FromJson<MyDataModel>(jsonString);
-                        UpdateUIText(data);
-                        OnDataReceived?.Invoke(data);
+                        var sensorData = JsonUtility.FromJson<SensorData>(jsonString);
+                        UpdateUIText(sensorData);
+                        OnDataReceived?.Invoke(sensorData);
                     }
                     catch (Exception ex)
                     {
@@ -157,7 +150,6 @@ public class WebSocketManager : MonoBehaviour
         finally
         {
             connected = false;
-            // Обновляем UI при отключении
             if (connectButton != null)
             {
                 connectButton.GetComponentInChildren<Text>().text = "Connect";
@@ -165,17 +157,16 @@ public class WebSocketManager : MonoBehaviour
         }
     }
 
-
     private void DisconnectMessage()
     {
         WebSocketDisconnect.SetActive(true);
         Time.timeScale = 0;
     }
 
-    private void UpdateUIText(MyDataModel data)
+    private void UpdateUIText(SensorData data)
     {
         if (outputText)
-            outputText.text = $"Property1: {data.Property1}\nProperty2: {data.Property2}";
+            outputText.text = $"EMG: {data.emg}\nLevel: {data.level}\nStrength: {data.strength}";
     }
 
     private void OnApplicationQuit()
@@ -199,8 +190,9 @@ public class WebSocketManager : MonoBehaviour
 }
 
 [System.Serializable]
-public class MyDataModel
+public class SensorData
 {
-    public string Property1;
-    public int Property2;
+    public int emg;
+    public int level;
+    public float strength;
 }

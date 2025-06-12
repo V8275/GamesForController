@@ -134,9 +134,9 @@ public class PlayerController : MonoBehaviour
             WebSocketManager.Instance.OnDataReceived -= HandleData;
     }
 
-    private void HandleData(MyDataModel data)
+    private void HandleData(SensorData data)
     {
-        Jump(data.Property2 > 50);
+        Jump(data.strength > 50);
     }
 
     public void SetInput(bool touch)
